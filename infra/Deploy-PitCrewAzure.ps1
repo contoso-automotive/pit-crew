@@ -25,7 +25,7 @@
     Stop after the what-if. Nothing changes.
 
 .EXAMPLE
-    pwsh -NoProfile -ExecutionPolicy Bypass -File .\infra\Deploy-PitCrewAzure.ps1 -Location eastus2 -BudgetEmail ops@contoso.com -WhatIfOnly
+    pwsh -NoProfile -ExecutionPolicy Bypass -File .\infra\Deploy-PitCrewAzure.ps1 -Location eastus2 -BudgetEmail <your alert address> -WhatIfOnly
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '',
     Justification = 'Interactive operator script: every line is for the person at the console.')]

@@ -9,7 +9,7 @@ reports/
 .env.*
 !.env.example
 
-# Agent run records and editor state stay on the machine that made them.
+# Agent run records and IDE state stay on the machine that made them.
 .agent-runs/
 *.log
 .DS_Store

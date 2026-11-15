@@ -35,7 +35,7 @@ These follow the [Azure Well-Architected Framework guide for Azure Container App
 You need the Azure CLI signed in to the target subscription, the GitHub CLI signed in, and the repository created. Run the what-if first:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File .\infra\Deploy-PitCrewAzure.ps1 -Location eastus2 -BudgetEmail ops@contoso.com -WhatIfOnly
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\infra\Deploy-PitCrewAzure.ps1 -Location eastus2 -BudgetEmail <your alert address> -WhatIfOnly
 ```
 
 Then run it again without `-WhatIfOnly`. It stops until you type `DEPLOY PIT CREW`, deploys, builds the web image in Azure Container Registry, and reads the resource group back from Azure Resource Graph. The read-back uses the `resource-graph` Azure CLI extension.

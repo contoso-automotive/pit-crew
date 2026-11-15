@@ -31,7 +31,7 @@ resource logs 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
   tags: tags
   properties: {
     sku: { name: 'PerGB2018' }
-    retentionInDays: 30 // The shortest standard retention: enough to troubleshoot a recording week (Cost Optimization).
+    retentionInDays: 30 // The shortest standard retention: enough to troubleshoot a week of lab work (Cost Optimization).
   }
 }
 

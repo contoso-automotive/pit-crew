@@ -1,4 +1,4 @@
-# One formatting baseline for every editor and every agent that edits this repository.
+# One formatting baseline for every IDE and every agent that edits this repository.
 root = true
 
 [*]
