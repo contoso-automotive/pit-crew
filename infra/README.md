@@ -7,7 +7,7 @@
 | Resource group | `rg-pitcrew-prod` | One lifecycle boundary for the whole workload |
 | Log Analytics workspace | `log-pitcrew-prod` | Console and system logs from Container Apps, 30-day retention |
 | Container registry | `crpitcrewprod001` | Images, with the admin user and anonymous pull turned off |
-| Managed identity | `id-pitcrew-app-prod` | The app's runtime identity: pulls images, nothing else |
+| Managed identity | `id-pitcrew-acrpull-prod` | Image pulls only, never reused for workload work (Azure Architecture Center) |
 | Managed identity | `id-pitcrew-deploy-prod` | GitHub Actions' production environment, federated by OpenID Connect |
 | Container Apps environment | `cae-pitcrew-prod` | Consumption workload profile, logs through Azure Monitor |
 | Container app | `ca-pitcrew-web-prod` | The Pit Crew web app |
@@ -19,12 +19,14 @@
 
 These follow the [Azure Well-Architected Framework guide for Azure Container Apps](https://learn.microsoft.com/azure/well-architected/service-guides/azure-container-apps).
 
-- **Security:** managed identities for image pulls and for the model, so no registry password or API key exists. The deploy identity trusts exactly one GitHub subject (the repository's `production` environment) and holds Container Apps Contributor on the two apps and AcrPush on the registry, nothing wider. HTTPS only.
+- **Security:** a dedicated identity for image pulls, and each app's own system-assigned identity for the model, so no registry password or API key exists. The deploy identity trusts exactly one GitHub subject (the repository's `production` environment) and holds Container Apps Contributor on the two apps and AcrPush on the registry, nothing wider. HTTPS only.
 - **Reliability:** liveness, readiness and startup probes with the guide's recommended settings, and graceful shutdown on `SIGTERM`.
 - **Cost Optimization:** scale to zero, a Basic registry, 30-day log retention and a budget with alerts.
 - **Operational Excellence:** everything is Bicep in Git, deployed by a reviewed workflow; logs reach Log Analytics without a shared key.
 
 ## Trade-offs a lab makes on purpose
+
+- **Container apps are created by Bicep.** The [Azure Architecture Center's Container Apps reference architecture](https://learn.microsoft.com/azure/architecture/example-scenario/serverless/microservices-with-container-apps) keeps them out of the infrastructure pipeline. Here Bicep creates them so the deploy identity only updates an image and never needs rights to create resources.
 
 - **Scale to zero instead of three replicas.** The guide wants at least three replicas for production traffic. A lab that sits idle between uses scales to zero and accepts a cold start.
 - **No zone redundancy and no private network.** Both need a custom virtual network, which adds cost and setup that no lesson uses. Production would add them.

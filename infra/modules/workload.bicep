@@ -36,9 +36,11 @@ resource logs 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
 }
 
 // ---------- Identities (Security: no passwords, least privilege) ----------
-// The app's runtime identity pulls images and, if Foundry is on, calls the model. Nothing else.
-resource appIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
-  name: 'id-${workload}-app-${environment}'
+// A dedicated identity for image pulls only, as the Azure Architecture Center's Container Apps
+// reference architecture recommends: never reused for workload operations. Each app's own
+// system-assigned identity does the workload's work (for example, calling the Foundry model).
+resource registryIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+  name: 'id-${workload}-acrpull-${environment}'
   location: location
   tags: tags
 }
@@ -74,11 +76,11 @@ resource registry 'Microsoft.ContainerRegistry/registries@2025-04-01' = {
 }
 
 resource appPullsImages 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(registry.id, appIdentity.id, roles.acrPull)
+  name: guid(registry.id, registryIdentity.id, roles.acrPull)
   scope: registry
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.acrPull)
-    principalId: appIdentity.properties.principalId
+    principalId: registryIdentity.properties.principalId
     principalType: 'ServicePrincipal'
   }
 }
@@ -94,6 +96,10 @@ resource deployPushesImages 'Microsoft.Authorization/roleAssignments@2022-04-01'
 }
 
 // ---------- Container Apps environment ----------
+// A dedicated environment for this one workload (Azure Architecture Center: don't share one).
+// Deliberate deviation: the Architecture Center keeps container apps out of the infrastructure
+// pipeline. Here Bicep creates them, so the deploy identity only ever UPDATES an image
+// (Container Apps Contributor on two apps) and never needs rights to create resources.
 resource containerEnv 'Microsoft.App/managedEnvironments@2025-07-01' = {
   name: 'cae-${workload}-${environment}'
   location: location
@@ -137,7 +143,7 @@ var appConfiguration = {
     transport: 'auto'
     allowInsecure: false
   }
-  registries: [{ server: registry.properties.loginServer, identity: appIdentity.id }]
+  registries: [{ server: registry.properties.loginServer, identity: registryIdentity.id }]
 }
 var scale = {
   minReplicas: 0
@@ -149,7 +155,7 @@ resource webApp 'Microsoft.App/containerApps@2025-07-01' = if (deployWeb) {
   name: 'ca-${workload}-web-${environment}'
   location: location
   tags: tags
-  identity: { type: 'UserAssigned', userAssignedIdentities: { '${appIdentity.id}': {} } }
+  identity: { type: 'SystemAssigned,UserAssigned', userAssignedIdentities: { '${registryIdentity.id}': {} } }
   properties: {
     environmentId: containerEnv.id
     workloadProfileName: 'Consumption'
@@ -172,7 +178,7 @@ resource feedApp 'Microsoft.App/containerApps@2025-07-01' = if (deployFeed) {
   name: 'ca-${workload}-feed-${environment}'
   location: location
   tags: tags
-  identity: { type: 'UserAssigned', userAssignedIdentities: { '${appIdentity.id}': {} } }
+  identity: { type: 'SystemAssigned,UserAssigned', userAssignedIdentities: { '${registryIdentity.id}': {} } }
   properties: {
     environmentId: containerEnv.id
     workloadProfileName: 'Consumption'
@@ -237,12 +243,13 @@ resource foundryProject 'Microsoft.CognitiveServices/accounts/projects@2025-06-0
   properties: {}
 }
 
-resource appUsesFoundry 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployFoundry) {
-  name: guid(resourceGroup().id, 'foundry', appIdentity.id, roles.foundryUser)
+// The web app's system-assigned identity, not the registry identity, may call the model.
+resource webUsesFoundry 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployFoundry && deployWeb) {
+  name: guid(resourceGroup().id, 'foundry', 'web', roles.foundryUser)
   scope: foundry
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.foundryUser)
-    principalId: appIdentity.properties.principalId
+    principalId: webApp!.identity.principalId
     principalType: 'ServicePrincipal'
   }
 }
