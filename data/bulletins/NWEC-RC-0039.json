@@ -1,0 +1,14 @@
+{
+  "recallId": "NWEC-RC-0039",
+  "maker": "Northwind Electric Cars",
+  "status": "closed",
+  "component": "Charge port door latch",
+  "partNumber": "NWEC-PN-3310-DL",
+  "models": ["Northwind EV Sedan"],
+  "modelYears": [2023, 2024],
+  "vinPrefixes": ["5NWEC0039PA00021", "5NWEC0042RA00007"],
+  "summary": "Closed. Every affected car has been repaired.",
+  "remedy": "Replace the charge port door latch.",
+  "issued": "2026-03-18",
+  "synthetic": true
+}

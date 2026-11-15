@@ -1,0 +1,11 @@
+# Keep the build context small and free of local state.
+node_modules
+dist
+coverage
+reports
+.git
+.github
+infra
+*.md
+.env
+.env.*

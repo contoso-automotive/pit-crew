@@ -1,0 +1,14 @@
+{
+  "recallId": "NWEC-RC-0042",
+  "maker": "Northwind Electric Cars",
+  "status": "open",
+  "component": "Battery coolant valve",
+  "partNumber": "NWEC-PN-7781-CV",
+  "models": ["Northwind EV Sedan", "Northwind EV Crossover"],
+  "modelYears": [2024, 2025],
+  "vinPrefixes": ["5NWEC0042RA00004", "5NWEC0042SA00011"],
+  "summary": "The battery coolant valve can stick closed. Flag affected cars at check-in and book a valve replacement.",
+  "remedy": "Replace the battery coolant valve and inspect the coolant line.",
+  "issued": "2026-11-02",
+  "synthetic": true
+}

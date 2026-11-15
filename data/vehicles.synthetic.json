@@ -1,0 +1,9 @@
+{
+  "_note": "Synthetic data for Contoso Automotive's Pit Crew app. Every VIN fails the real check digit by design, so none can match a car on the road.",
+  "vehicles": [
+    { "vin": "5NWEC0042RA000042", "maker": "Northwind Electric Cars", "model": "Northwind EV Sedan", "modelYear": 2024 },
+    { "vin": "5NWEC0042SA000118", "maker": "Northwind Electric Cars", "model": "Northwind EV Crossover", "modelYear": 2025 },
+    { "vin": "5NWEC0042RA000077", "maker": "Northwind Electric Cars", "model": "Northwind EV Sedan", "modelYear": 2024 },
+    { "vin": "5NWEC0039PA000212", "maker": "Northwind Electric Cars", "model": "Northwind EV Sedan", "modelYear": 2023 }
+  ]
+}

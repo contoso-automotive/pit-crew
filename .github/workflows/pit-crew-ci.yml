@@ -1,0 +1,42 @@
+# Pit Crew CI: lint, type-check and test every pull request into main.
+# The job name "test" is the status check a ruleset requires, so keep it stable.
+name: pit-crew-ci
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+# One run per pull request; a new push cancels the run it replaces.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Actions are pinned to full commit SHAs (GitHub's secure-use guidance); Dependabot updates them.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - shell: bash
+        run: |
+          mkdir -p reports
+          npm test 2>&1 | tee reports/test-output.txt
+      - if: always()
+        run: >
+          echo "### Pit Crew tests: ${{ job.status }}"
+          >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: test-results
+          path: reports/
+          retention-days: 30

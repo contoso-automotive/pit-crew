@@ -1,0 +1,10 @@
+{
+  // What ships in the container: compiled source only, no tests.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "exclude": ["src/**/*.test.ts"]
+}

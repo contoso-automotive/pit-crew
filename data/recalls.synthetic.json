@@ -1,0 +1,23 @@
+{
+  "_note": "Synthetic data for the GH-600 course. Every VIN fails the check digit by design.",
+  "recalls": [
+    {
+      "id": "NWEC-RC-0042",
+      "maker": "Northwind Electric Cars",
+      "component": "Battery coolant valve",
+      "partNumber": "NWEC-PN-7781-CV",
+      "remedy": "Replace the battery coolant valve and inspect the coolant line.",
+      "status": "open",
+      "vins": ["5NWEC0042RA000042", "5NWEC0042SA000118"]
+    },
+    {
+      "id": "NWEC-RC-0039",
+      "maker": "Northwind Electric Cars",
+      "component": "Charge port door latch",
+      "partNumber": "NWEC-PN-3310-DL",
+      "remedy": "Replace the charge port door latch.",
+      "status": "closed",
+      "vins": ["5NWEC0039PA000212", "5NWEC0042RA000077"]
+    }
+  ]
+}

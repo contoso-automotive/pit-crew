@@ -1,0 +1,16 @@
+# Dependencies and build output: always rebuilt from package-lock.json and the source.
+node_modules/
+dist/
+coverage/
+reports/
+
+# Local environment files can hold secrets. They never belong in Git.
+.env
+.env.*
+!.env.example
+
+# Agent run records and editor state stay on the machine that made them.
+.agent-runs/
+*.log
+.DS_Store
+Thumbs.db

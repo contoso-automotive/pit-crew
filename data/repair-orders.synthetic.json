@@ -1,0 +1,8 @@
+{
+  "_note": "Synthetic repair orders for the Pit Crew bay board. Names come from the Microsoft Press fictitious names list.",
+  "repairOrders": [
+    { "id": "RO-1042", "vin": "5NWEC0042RA000042", "status": "checked-in", "technician": "Terry Adams" },
+    { "id": "RO-1043", "vin": "5NWEC0042RA000077", "status": "in-bay", "technician": "Pilar Ackerman" },
+    { "id": "RO-1044", "vin": "5NWEC0039PA000212", "status": "done", "technician": "Terry Adams" }
+  ]
+}
