@@ -1,7 +1,7 @@
 # Pit Crew container image. Two stages: build with dev tools, ship without them.
 # Alpine keeps the image small, which the Azure Well-Architected Framework recommends
 # for a smaller attack surface and faster starts.
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -9,7 +9,7 @@ COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 RUN npm run build
 
-FROM node:24-alpine
+FROM node:26-alpine
 ENV NODE_ENV=production PORT=8080
 WORKDIR /app
 COPY package.json package-lock.json ./
