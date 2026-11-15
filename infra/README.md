@@ -22,7 +22,7 @@ These follow the [Azure Well-Architected Framework guide for Azure Container App
 - **Security:** a dedicated identity for image pulls, and each app's own system-assigned identity for the model, so no registry password or API key exists. The deploy identity trusts exactly one GitHub subject (the repository's `production` environment) and holds Container Apps Contributor on the two apps and AcrPush on the registry, nothing wider. HTTPS only.
 - **Reliability:** liveness, readiness and startup probes with the guide's recommended settings, and graceful shutdown on `SIGTERM`.
 - **Cost Optimization:** scale to zero, a Basic registry, 30-day log retention and a budget with alerts.
-- **Operational Excellence:** everything is Bicep in Git, deployed by a reviewed workflow; logs reach Log Analytics without a shared key.
+- **Operational Excellence:** everything is Bicep in Git, deployed by a reviewed workflow. Logs reach Log Analytics without a shared key.
 
 ## Trade-offs a lab makes on purpose
 

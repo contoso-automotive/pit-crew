@@ -20,7 +20,7 @@ Pit Crew is Contoso Automotive's service bay app. A service advisor checks a car
 
 ## Rules
 
-- Synthetic data only. Every VIN must fail the real check digit; `src/vin/vin.test.ts` enforces it.
+- Synthetic data only. Every VIN must fail the real check digit, and `src/vin/vin.test.ts` enforces it.
 - Escape every value you put in HTML with `escapeHtml`.
 - Show status as a word, and a symbol where it helps. Never use color alone to carry meaning.
 - Put tests next to the code they cover, named `*.test.ts`, and use Vitest.

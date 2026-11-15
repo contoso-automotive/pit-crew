@@ -1,4 +1,4 @@
-// Check-in bay behavior: the page renders, a known VIN shows its car, and input is escaped.
+// Check-in bay behavior: the page loads, a known VIN shows its car, and input is escaped.
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";

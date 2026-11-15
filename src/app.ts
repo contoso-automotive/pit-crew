@@ -38,7 +38,7 @@ export function createApp() {
   const app = express();
   app.disable("x-powered-by"); // Don't advertise the framework to scanners.
   app.use(securityHeaders);
-  // fileURLToPath, not URL.pathname: pathname gives "/C:/..." on Windows, which breaks the static path.
+  // fileURLToPath, not URL.pathname: on Windows, pathname keeps a slash before the drive letter, which breaks the static path.
   app.use(express.static(fileURLToPath(new URL("../public/", import.meta.url)), { index: false }));
 
   // Probes for Azure Container Apps: liveness says the process answers; readiness says it can serve.
