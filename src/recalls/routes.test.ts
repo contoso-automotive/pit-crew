@@ -33,4 +33,10 @@ describe("GET /recalls/{vin}", () => {
     const res = await fetch(`${baseUrl}/recalls/NOT-A-VIN`);
     expect(res.status).toBe(400);
   });
+
+  it("returns 404 for a well-formed VIN that is not on file", async () => {
+    const res = await fetch(`${baseUrl}/recalls/5NWEC0042RA000043`);
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ error: "Vehicle not found" });
+  });
 });

@@ -30,9 +30,13 @@ const { vehicles } = await readJson<{ vehicles: Vehicle[] }>("vehicles.synthetic
 const { recalls } = await readJson<{ recalls: RecallRecord[] }>("recalls.synthetic.json");
 const vehiclesByVin = new Map(vehicles.map((v) => [v.vin, v]));
 
-/** The vehicle with this VIN. */
+/** The vehicle with this VIN, if it is on file. */
+export function findVehicle(vin: string): Vehicle | undefined {
+  return vehiclesByVin.get(vin);
+}
+
 export function getVehicle(vin: string): Vehicle {
-  const vehicle = vehiclesByVin.get(vin);
+  const vehicle = findVehicle(vin);
   if (!vehicle) throw new Error(`No vehicle with VIN ${vin}`);
   return vehicle;
 }
