@@ -24,6 +24,14 @@ describe("GET /recalls/{vin}", () => {
     expect(body.recalls).toContainEqual(expect.objectContaining({ id: "NWEC-RC-0042", status: "open" }));
   });
 
+  it("finds recalls for a VIN covered by a bulletin prefix", async () => {
+    const res = await fetch(`${baseUrl}/recalls/5NWEC0042RA000043`);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { vin: string; recalls: { id: string; status: string }[] };
+    expect(body.vin).toBe("5NWEC0042RA000043");
+    expect(body.recalls).toContainEqual(expect.objectContaining({ id: "NWEC-RC-0042", status: "open" }));
+  });
+
   it("accepts a lowercase VIN with spaces around it", async () => {
     const res = await fetch(`${baseUrl}/recalls/%205nwec0042ra000042%20`);
     expect(res.status).toBe(200);
@@ -32,5 +40,10 @@ describe("GET /recalls/{vin}", () => {
   it("returns 400 for a malformed VIN", async () => {
     const res = await fetch(`${baseUrl}/recalls/NOT-A-VIN`);
     expect(res.status).toBe(400);
+  });
+
+  it("returns 404 when a well-formed VIN has no vehicle or recall data", async () => {
+    const res = await fetch(`${baseUrl}/recalls/5NWEC0000AA000001`);
+    expect(res.status).toBe(404);
   });
 });
