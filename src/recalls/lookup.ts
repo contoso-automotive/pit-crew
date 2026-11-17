@@ -32,9 +32,14 @@ const vehiclesByVin = new Map(vehicles.map((v) => [v.vin, v]));
 
 /** The vehicle with this VIN. */
 export function getVehicle(vin: string): Vehicle {
-  const vehicle = vehiclesByVin.get(vin);
+  const vehicle = findVehicle(vin);
   if (!vehicle) throw new Error(`No vehicle with VIN ${vin}`);
   return vehicle;
+}
+
+/** The vehicle with this VIN, if it exists. */
+export function findVehicle(vin: string): Vehicle | undefined {
+  return vehiclesByVin.get(vin);
 }
 
 /** Every recall, open or closed, that lists this VIN. */
