@@ -28,6 +28,12 @@ describe("check-in bay", () => {
     expect(await res.text()).toContain("2025 Northwind EV Crossover");
   });
 
+  it("shows a not-found message for a well-formed VIN that is not on file", async () => {
+    const res = await fetch(`${baseUrl}/checkin?vin=5NWEC0042RA000043`);
+    expect(res.status).toBe(404);
+    expect(await res.text()).toContain("No vehicle found for this VIN.");
+  });
+
   it("escapes what the advisor typed", async () => {
     const res = await fetch(`${baseUrl}/checkin?vin=${encodeURIComponent("<script>")}`);
     expect(res.status).toBe(400);

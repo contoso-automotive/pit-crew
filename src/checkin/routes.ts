@@ -26,6 +26,11 @@ checkinRouter.get("/checkin", (req, res) => {
   }
 
   const vehicle = getVehicle(vin);
+  if (!vehicle) {
+    res.status(404).send(page("Vehicle not found", `<p class="status status-warn">No vehicle found for this VIN.</p>${form(vin)}`));
+    return;
+  }
+
   res.send(page("Check-in bay", `
 ${form(vin)}
 <section class="card" aria-label="Vehicle">

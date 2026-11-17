@@ -30,11 +30,9 @@ const { vehicles } = await readJson<{ vehicles: Vehicle[] }>("vehicles.synthetic
 const { recalls } = await readJson<{ recalls: RecallRecord[] }>("recalls.synthetic.json");
 const vehiclesByVin = new Map(vehicles.map((v) => [v.vin, v]));
 
-/** The vehicle with this VIN. */
-export function getVehicle(vin: string): Vehicle {
-  const vehicle = vehiclesByVin.get(vin);
-  if (!vehicle) throw new Error(`No vehicle with VIN ${vin}`);
-  return vehicle;
+/** The vehicle with this VIN, if one is on file. */
+export function getVehicle(vin: string): Vehicle | undefined {
+  return vehiclesByVin.get(vin);
 }
 
 /** Every recall, open or closed, that lists this VIN. */
